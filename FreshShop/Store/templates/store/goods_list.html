@@ -1,0 +1,65 @@
+{% extends "store/base.html" %}
+
+{% block style %}
+    <title>商品列表</title>
+{% endblock %}
+
+
+
+{% block centent %}
+    {% block ladel %}
+    <a href="/store/add_goods/" class="btn btn-warning">添加商品</a>
+{% endblock %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>商品名称</th>
+                <th>商品价格</th>
+                <th>商品数量</th>
+                <th>商品描述</th>
+                <th>出厂日期</th>
+                <th>保质期(月）</th>
+                 <th>操作</th>
+            </tr>
+        </thead>
+        <thbody>
+            {% for goods in page %}
+                <tr>
+                    <td>{{ goods.goods_name }}</td>
+                    <td><input type="text" value="{{ goods.goods_price }}"></td>
+                    <td>{{ goods.goods_number }}</td>
+                    <td>{{ goods.goods_description }}</td>
+                    <td>{{ goods.goods_date | date:"Y/m/d" }}</td>
+                    <td>{{ goods.goods_safeDate }}</td>
+                    <td>
+                        <a href="#" class="btn btn-danger ">下架</a>
+                        <a href="#" class="btn btn-primary ">销毁</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </thbody>
+    </table>
+    <div class="row">
+    <div class="col-sm=12 col-md-5">
+            <div class="dataTables_info" id ="dataTable_info" role="status" aria-live="polite">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当前共显示{{ count_goods }}条信息</div>
+    </div>
+    <div class="dataTables_paginate paging_simple_numbers">
+        <ul class="pagination">
+            <li class="paginate_button page-item ">
+                    <a class="page-link" href="?keywords={{ keywords }}&page_num={{ before_num}}">上一页</a>
+                </li>
+            {% for p in page_range %}
+                <li class="paginate_button page-item">
+                    <a class="page-link" href="?keywords={{ keywords }}&page_num={{ p }}">{{ p }}</a>
+                </li>
+            {% endfor %}
+         <li class="paginate_button page-item ">
+                    <a class="page-link" href="?keywords={{ keywords }}&page_num={{ next_num }}">下一页</a>
+                </li>
+        </ul>
+    </div>
+    <div class="col-sm-12 col-md-4" style="text-align: right">
+        第 {{ page_num}} 页 / 共 {{  page_end }}  页
+    </div>
+    </div>
+{% endblock %}
