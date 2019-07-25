@@ -18,4 +18,5 @@ from django.urls import path,include
 
 urlpatterns = [
     path('store/',include("Store.urls")),
+    path('ckeditor/',include("ckeditor_uploader.urls"))
 ]
