@@ -65,7 +65,8 @@ def index(request):
 
 def loginOut(request):                                                  #退出函数
     response=HttpResponseRedirect("/store/login/")
-    response.delete_cookie("username")                                  #删除COOKIE
+    for key in request.COOKIES:
+        response.delete_cookie(key)                                  #删除COOKIE
     return response
 
 def base(request):                                              #继承页函数
@@ -117,6 +118,7 @@ def add_goods(request):                                         #增加商品函
         goods_description = request.POST.get("goods_description")
         goods_date = request.POST.get("goods_date")
         goods_safeDate = request.POST.get("goods_safeDate")
+        goods_type=request.POST.get("goods_type")
         goods_store = request.COOKIES.get("has_store")              #通过COOKIE中商铺ID来获取商铺
         goods_image = request.FILES.get("goods_image")
 
@@ -128,6 +130,7 @@ def add_goods(request):                                         #增加商品函
         goods.goods_date = goods_date
         goods.goods_safeDate = goods_safeDate
         goods.goods_image=goods_image
+        goods.goods_type=goods_type
         goods.save()
 
         goods.store_id.add(                                     #把商品添加到指定商铺里，商铺通过id核实，而id在传入数据时通过COOKIE知道
@@ -137,15 +140,19 @@ def add_goods(request):                                         #增加商品函
     return render(request,"store/add_goods.html")
 
 
-def goods_list(request):                                                    #商铺列表函数
+def goods_list(request,status):                                                    #商铺列表函数
+    if status == "up":
+        status_num=1
+    else:
+        status_num=0
     keywords=request.GET.get("keywords","")                             #获取搜索内容
     page_num=request.GET.get("page_num",1)                               #获取页码，默认为第一页
     store_id =request.COOKIES.get("has_store")                          #获取商铺ID
     store =Store.objects.get(id=int(store_id))                          #获取商铺
     if keywords:
-        goods_list=store.goods_set.filter(goods_name__contains=keywords,goods_upder=1)    #存在就查询包含该内容的内容
+        goods_list=store.goods_set.filter(goods_name__contains=keywords,goods_upder=status_num)    #存在就查询包含该内容的内容
     else:
-        goods_list=store.goods_set.filter(goods_upder=1)                     #不存在就查询所有
+        goods_list=store.goods_set.filter(goods_upder=status_num)                     #不存在就查询所有
     paginator=Paginator(goods_list,3)                         #把所有信息在每页展示3条
     page=paginator.page(int(page_num))                         #显示请求页码的当页信息
     page_range=paginator.page_range                             #显示页码范围
@@ -168,7 +175,7 @@ def goods_list(request):                                                    #商
         before_num=page_num-1
     return render(request,"store/goods_list.html",{"page":page,"page_range":page_range,"keywords":keywords,
                                                    "page_num":page_num,"page_end":page_end,"count_goods":count_goods,
-                                                   "next_num":next_num,"before_num":before_num})
+                                                   "next_num":next_num,"before_num":before_num,"status":status})
 
 
 def goods(request,goods_id):                                            #商品函数
@@ -199,19 +206,43 @@ def update_goods(request,goods_id):                                         #修
         return HttpResponseRedirect("/store/goods/%s"%goods_id)
     return render(request,"store/update_goods.html",locals())
 
-def delete_goods(request,goods_id):
-    Goods.objects.filter(id=goods_id).delete()
-    return HttpResponseRedirect("/store/goods_list/")
 
-def upder_goods(request):
+
+def set_goods(request,status):
+    if status == "up":
+        status_num=1
+    else:
+        status_num=0
     id=request.GET.get("id")
     referer=request.META.get("HTTP_REFERER")
     if id:
         goods=Goods.objects.filter(id=id).first()
-        goods.goods_upder=0
-        goods.save()
+        if status =="delete":
+            goods.delete()
+        else:
+            goods.goods_upder=status_num
+            goods.save()
     return HttpResponseRedirect(referer)
 
+def add_goods_type(request):
+    goods=GoodsType.objects.all()
+    if request.method=="POST":
+        name=request.POST.get("name")
+        description=request.POST.get("description")
+        picture=request.POST.get("picture")
+        if name and description :
+            types=GoodsType()
+            types.goods_name=name
+            types.goods_description=description
+            types.goods_image=picture
+            types.save()
+            return HttpResponseRedirect("/store/add_goods_type/")
+    return render(request,"store/add_goods_type.html",locals())
 
+def delete(request):
+    id=request.GET.get("id")
+    good = GoodsType.objects.get(id=int(id))
+    good.delete()
+    return HttpResponseRedirect("/store/add_goods_type/")
 
 # Create your views here.
