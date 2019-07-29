@@ -14,4 +14,22 @@ class Address(models.Model):
     post_number = models.CharField(max_length=32,verbose_name="邮箱")
     buyer_id = models.ForeignKey(to=Buyer,on_delete=models.CASCADE,verbose_name="用户id")
 
+class Order(models.Model):
+    order=models.CharField(max_length=32,verbose_name="id订单编号")
+    goods_count =models.IntegerField(verbose_name="商品数量")
+    order_user =models.ForeignKey(to= Buyer,on_delete=models.CASCADE,verbose_name="订单用户")
+    order_address = models.ForeignKey(to= Address,on_delete=models.CASCADE,verbose_name="订单地址",blank=True,null=True)
+    order_price=models.FloatField(verbose_name="订单总价")
+    order_status=models.IntegerField(default=1,verbose_name="订单状态") #未支付1，待发货2，已发货3，已收货4，已退货0
+
+class OrderDetail(models.Model):
+    order_id = models.ForeignKey(to = Order,on_delete=models.CASCADE,verbose_name="订单编号（多对一）")
+    goods_id =models. IntegerField(verbose_name="商品id")
+    goods_name=models.CharField(max_length=32,verbose_name="商品名称")
+    goods_price=models.FloatField(verbose_name="商品价格")
+    goods_number= models.IntegerField(verbose_name="商品购买数量")
+    goods_total= models.FloatField(verbose_name="商品总价")
+    goods_store= models.IntegerField(verbose_name="商店id")
+    goods_images=models.ImageField(verbose_name="商品图片")
+
 # Create your models here.

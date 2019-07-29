@@ -1,3 +1,5 @@
+import time
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.shortcuts import HttpResponseRedirect
 
@@ -126,6 +128,50 @@ def detail(request):
     goods_id=request.GET.get("id")
     if goods_id:
         goods=Goods.objects.filter(id=goods_id).first()
-        return render(request,"detail.html",locals())
-    return HttpResponseRedirect("/Buyer/index/")
+        if goods:
+            return render(request,"detail.html",locals())
+    return HttpResponseRedirect("没有该商品")
+
+
+def setOrderId(user_id,goods_id,store_id):
+    result=time.strftime("%Y%m%d%H%M%S",time.localtime())
+    return result+user_id+goods_id+store_id
+
+def place_order(request):
+    if request.method == "POST":
+        count= int(request.POST.get("count"))
+        goods_id=request.POST.get("goods_id")
+        user_id=request.COOKIES.get("user_id")
+
+        goods=Goods.objects.get(id=goods_id)
+        store_id=goods.store_id.id
+        price=goods.goods_price
+
+        order =Order()
+        order.order_id=setOrderId(str(user_id),str(goods_id),str(store_id))
+        order.goods_count=count
+        order.order_user=Buyer.objects.get(id=user_id)
+        order.order_price=count * goods.goods_price
+        order.order_status=1
+        order.save()
+
+        order_detail=OrderDetail()
+        order_detail.order_id=order
+        order_detail.goods_id=goods_id
+        order_detail.goods_name=goods.goods_name
+        order_detail.goods_price=goods.goods_price
+        order_detail.goods_number=count
+        order_detail.goods_total=count*goods.goods_price
+        order_detail.goods_store=store_id
+        order_detail.goods_images=goods.goods_image
+        order_detail.save()
+
+        detail=[order_detail]
+        return render(request,"place_order.html",locals())
+    else:
+        return HttpResponse("非法请求")
+
+def pay_order(request):
+    return  HttpResponseRedirect("https")
+
 # Create your views here.

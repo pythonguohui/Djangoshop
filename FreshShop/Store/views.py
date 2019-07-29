@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import HttpResponseRedirect
 
 from Store.models import *
-
+from Buyer.models import OrderDetail
 
 def set_password(password):  #设置密码加密
     md5=hashlib.md5()
@@ -133,11 +133,7 @@ def add_goods(request):                                         #增加商品函
         goods.goods_safeDate = goods_safeDate
         goods.goods_image=goods_image
         goods.goods_type=GoodsType.objects.get(id=int(goods_type))
-        goods.save()
-
-        goods.store_id.add(                                     #把商品添加到指定商铺里，商铺通过id核实，而id在传入数据时通过COOKIE知道
-            Store.objects.get(id=int(goods_store))
-        )
+        goods.store_id=Store.objects.get(id=int(goods_store))
         goods.save()
         return HttpResponseRedirect("/store/goods_list/up/")
     return render(request,"store/add_goods.html",locals())
@@ -248,7 +244,10 @@ def delete(request):
     good.delete()
     return HttpResponseRedirect("/store/add_goods_type/")
 
-
+def order_list(request):
+    store_id=request.COOKIES.get("has_store")
+    order_list=OrderDetail.objects.filter(order_id__order_status=2,goods_store=store_id)
+    return render(request,"store/order_list.html",locals())
 
 
 # Create your views here.

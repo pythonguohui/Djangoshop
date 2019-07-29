@@ -1,0 +1,54 @@
+{% extends "store/base.html" %}
+
+{% block style %}
+    <title>订单信息</title>
+{% endblock %}
+
+
+
+{% block centent %}
+    <table class="table table-bordered">
+        <thead>
+            <tr style="text-align: center">
+                <th>订单编号</th>
+                <th>订单商品</th>
+                <th>订单金额</th>
+                 <th style="text-align: center">操作</th>
+            </tr>
+        </thead>
+        <thbody>
+            {% for order in order_list %}
+                <tr style="text-align: center">
+                    <td >{{ order.order_id.order_id }}</td>
+                    <td>{{ order.goods_name }}</td>
+                    <td>{{ order.goods_total}}</td>
+                    <td style="text-align: center"><a href="#" class="btn btn-primary">确认发货</a>
+                    <a href="#" class="btn btn-danger">拒绝发货</a></td>
+                </tr>
+            {% endfor %}
+        </thbody>
+    </table>
+    <div class="row">
+    <div class="col-sm=12 col-md-5">
+            <div class="dataTables_info" id ="dataTable_info" role="status" aria-live="polite">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当前共显示{{ count_goods }}条信息</div>
+    </div>
+    <div class="dataTables_paginate paging_simple_numbers">
+        <ul class="pagination">
+            <li class="paginate_button page-item ">
+                    <a class="page-link" href="?keywords={{ keywords }}&page_num={{ before_num}}">上一页</a>
+                </li>
+            {% for p in page_range %}
+                <li class="paginate_button page-item">
+                    <a class="page-link" href="?keywords={{ keywords }}&page_num={{ p }}">{{ p }}</a>
+                </li>
+            {% endfor %}
+         <li class="paginate_button page-item ">
+                    <a class="page-link" href="?keywords={{ keywords }}&page_num={{ next_num }}">下一页</a>
+                </li>
+        </ul>
+    </div>
+    <div class="col-sm-12 col-md-4" style="text-align: right">
+        第 {{ page_num}} 页 / 共 {{  page_end }}  页
+    </div>
+    </div>
+{% endblock %}
