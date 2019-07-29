@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}
+    支付结果
+{% endblock %}
+
+{% block style %}
+    <style>
+    .modality{
+        color: black;
+        font-size: 26px;
+        text-align: center;
+    }
+    </style>
+{% endblock %}
+
+{% block centent %}
+    <p style="font-size: 32px;text-align: center ;color: blue;">支付成功</p><br>
+    <p class="modality">支付金额：{{ request.GET.total_amount }}</p>
+    <p class="modality">支付编号：{{ request.GET.out_trade_no }}</p>
+    <p class="modality">支付时间：{{ request.GET.timestamp }}</p>
+{% endblock %}

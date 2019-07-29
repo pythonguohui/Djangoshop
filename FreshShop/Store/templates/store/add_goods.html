@@ -29,7 +29,11 @@
         <input type="text" class="form-control-user form-control" placeholder="保质期(月）" name="goods_safeDate">
     </div>
      <div class="form-group">
-        <input type="text" class="form-control-user form-control" placeholder="商品类型" name="goods_type">
+        <select type="text" class="form-control-user form-control" placeholder="商品类型" name="goods_type">
+            {% for goods_type in goods_type_list %}
+                <option value="{{ goods_type.id }}">{{ goods_type.goods_name }}</option>
+            {% endfor %}
+        </select>
     </div>
     <div class="form-group">
             <input class="form-control form-control-user" type="hidden" name="goods_store" value="{{ request.COOKIES.has_store }}">

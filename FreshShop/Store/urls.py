@@ -15,5 +15,5 @@ urlpatterns = [
     re_path(r"update_goods/(?P<goods_id>\d+)/",update_goods),
     re_path(r"set_goods/(?P<status>\w+)/",set_goods),
     path("add_goods_type/",add_goods_type),
-    path("delete/",delete)
+    path("delete/",delete),
 ]
