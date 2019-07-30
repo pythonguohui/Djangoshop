@@ -122,6 +122,9 @@ def pay_order(request):
         return_url="http://127.0.0.1:8000/Buyer/pay_result/",
         notify_url="http://127.0.0.1:8000/Buyer/pay_result/"
     )
+    order = Order.objects.get(order=order_id)
+    order.order_status = 2
+    order.save()
     return  HttpResponseRedirect ("https://openapi.alipaydev.com/gateway.do?" + order_string)
 
 def detail(request):
@@ -148,10 +151,10 @@ def place_order(request):
         price=goods.goods_price
 
         order =Order()
-        order.order_id=setOrderId(str(user_id),str(goods_id),str(store_id))
+        order.order=setOrderId(str(user_id),str(goods_id),str(store_id))
         order.goods_count=count
         order.order_user=Buyer.objects.get(id=user_id)
-        order.order_price=count * goods.goods_price
+        order.order_price=count * price
         order.order_status=1
         order.save()
 
@@ -171,7 +174,9 @@ def place_order(request):
     else:
         return HttpResponse("非法请求")
 
-def pay_order(request):
-    return  HttpResponseRedirect("https")
+def querenfahuo(request):
+    order_id=request.GET.get("order")
+    order = Order.objects.get(order=order_id)
+    order.order_status = 2
 
 # Create your views here.
