@@ -22,8 +22,11 @@
                     <td >{{ order.order_id.order_id }}</td>
                     <td>{{ order.goods_name }}</td>
                     <td>{{ order.goods_total}}</td>
-                    <td style="text-align: center"><a href="#" class="btn btn-primary">确认发货</a>
-                    <a href="#" class="btn btn-danger">拒绝发货</a></td>
+                    <td style="text-align: center">
+                        <a href="#" class="btn btn-primary">确认发货</a>
+                        <a href="#" class="btn btn-danger">拒绝发货</a>
+                        <a href="#"class="btn btn-warning">删除订单</a>
+                    </td>
                 </tr>
             {% endfor %}
         </thbody>

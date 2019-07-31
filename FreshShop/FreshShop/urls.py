@@ -14,10 +14,21 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path,include,re_path
+from Buyer.views import index
+from rest_framework import routers
+from Store.views import UserViewSet
+from Store.views import TypeViewSet
+
+router=routers.DefaultRouter()
+router.register(r"goods",UserViewSet)
+router.register(r"goodsType",TypeViewSet)
 
 urlpatterns = [
     path('store/',include("Store.urls")),
     path('ckeditor/',include("ckeditor_uploader.urls")),
-    path('Buyer/',include("Buyer.url"))
+    path('Buyer/',include("Buyer.url")),
+    re_path(r'^$/',index),
+    re_path('^API',include(router.urls)),
+    re_path('^api_auth',include('rest_framework.urls'))
 ]

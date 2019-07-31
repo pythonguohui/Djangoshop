@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Manager
 
 class Seller(models.Model):
     username=models.CharField(max_length=32,verbose_name="用户名")
@@ -23,11 +24,23 @@ class Store(models.Model):
     store_money=models.FloatField(verbose_name="店铺注册资金")
     user_id =models.IntegerField(verbose_name="店铺主人")
     type=models.ManyToManyField(to=StoreType,verbose_name="店铺类型")
+#
+# import datetime
+# class GoodsTypeManage(Manager):
+#     def addType(self,name,picture):
+#         goods_type =GoodsType()
+#         goods_type.goods_name=name
+#         now= datetime.datetime.now().strftime("%Y-%m-%d")
+#         goods_type.goods_description="%s_%s"%(now,name)
+#         goods_type.goods_image=picture
+#         goods_type.save()
+#         return  goods_type
 
 class GoodsType(models.Model):
     goods_name=models.CharField(max_length=32,verbose_name="商品类型名称")
     goods_description=models.TextField(verbose_name="商品类型描述")
     goods_image=models.ImageField(upload_to="store/images",verbose_name="图片地址",null=True,blank=True)
+
 
 class Goods(models.Model):
     goods_name=models.CharField(max_length=32,verbose_name="商品名称")
@@ -45,7 +58,6 @@ class GoodsImg(models.Model):
     img_address = models.ImageField(upload_to="store/images",verbose_name="图片地址")
     img_description = models.TextField(max_length=32, verbose_name="图片描述")
     goods_id = models.ForeignKey(to = Goods,on_delete = models.CASCADE, verbose_name="商品id")
-
 
 
 

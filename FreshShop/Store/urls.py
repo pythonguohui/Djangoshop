@@ -6,7 +6,6 @@ urlpatterns = [
     path("index/",index),
     re_path("^$",index),
     path("blank/",base),
-    path("404/",error404),
     path("qc/",loginOut),
     path("register_store/",register_store),
     path("add_goods/",add_goods),
@@ -16,5 +15,6 @@ urlpatterns = [
     re_path(r"set_goods/(?P<status>\w+)/",set_goods),
     path("add_goods_type/",add_goods_type),
     path("delete/",delete),
-    path("order_list/",order_list)
+    path("order_list/",order_list),
+    path(r"ajax_goods_list/",ajax_goods_list)
 ]

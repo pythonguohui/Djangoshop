@@ -8,7 +8,9 @@ urlpatterns = [
     path("register/", register),
     path("list/", goods_list),
     path("detail/",detail),
-    path("place_order/",place_order)
+    path("place_order/",place_order),
+    path("cart/",cart),
+    path("add_cart/", add_cart),
 ]
 
 

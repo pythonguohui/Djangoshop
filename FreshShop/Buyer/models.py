@@ -15,7 +15,7 @@ class Address(models.Model):
     buyer_id = models.ForeignKey(to=Buyer,on_delete=models.CASCADE,verbose_name="用户id")
 
 class Order(models.Model):
-    order=models.CharField(max_length=32,verbose_name="id订单编号")
+    order_id=models.CharField(max_length=32,verbose_name="id订单编号")
     goods_count =models.IntegerField(verbose_name="商品数量")
     order_user =models.ForeignKey(to= Buyer,on_delete=models.CASCADE,verbose_name="订单用户")
     order_address = models.ForeignKey(to= Address,on_delete=models.CASCADE,verbose_name="订单地址",blank=True,null=True)
@@ -31,5 +31,16 @@ class OrderDetail(models.Model):
     goods_total= models.FloatField(verbose_name="商品总价")
     goods_store= models.IntegerField(verbose_name="商店id")
     goods_images=models.ImageField(verbose_name="商品图片")
+
+class Cart(models.Model):
+    goods_name=models.CharField(max_length=32,verbose_name="商品名称")
+    goods_price=models.FloatField(verbose_name="商品价格")
+    goods_total=models.FloatField(verbose_name="商品总价")
+    goods_number=models.IntegerField(verbose_name="商品数量")
+    goods_picture=models.ImageField(verbose_name=" 商品图片")
+    goods_id=models.IntegerField(verbose_name="商品id")
+    goods_store=models.IntegerField(verbose_name="商品店铺")
+    user_id=models.IntegerField(verbose_name="用户id")
+
 
 # Create your models here.

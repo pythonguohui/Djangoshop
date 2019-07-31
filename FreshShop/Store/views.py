@@ -1,10 +1,10 @@
 import hashlib
 
+
 from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.shortcuts import HttpResponseRedirect
 
-from Store.models import *
 from Buyer.models import OrderDetail
 
 def set_password(password):  #设置密码加密
@@ -72,10 +72,6 @@ def loginOut(request):                                                  #退出�
 
 def base(request):                                              #继承页函数
     return render(request, "store/base.html")
-
-def error404(request):                                          #报错页函数
-    return render(request,"store/404.html")
-
 
 def register_store(request):                                   #注册商铺
     type_list=StoreType.objects.all()                          #查询商铺类型库里所有信息
@@ -248,6 +244,21 @@ def order_list(request):
     store_id=request.COOKIES.get("has_store")
     order_list=OrderDetail.objects.filter(order_id__order_status=2,goods_store=store_id)
     return render(request,"store/order_list.html",locals())
+
+from rest_framework import  viewsets
+from Store.serializers import *
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = Goods.objects.all()
+    serializer_class=UserSerializer
+
+
+class TypeViewSet(viewsets.ModelViewSet):
+    queryset = GoodsType.objects.all()
+    serializer_class=GoodsTypeSerializer
+
+def ajax_goods_list(request):
+    return render(request,"store/ajax_goods_list.html")
 
 
 # Create your views here.
