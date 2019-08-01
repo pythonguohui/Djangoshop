@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'Store',
     'Buyer',
     'ckeditor',
+    'djcelery',
     'rest_framework',
     'ckeditor_uploader'
 ]
@@ -139,5 +140,30 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
     'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE':3
+    'PAGE_SIZE':3,
+
+    'DEFAULT_RENDERER_CLASSES':(
+          'utils.rendererresponse.Customrenderer',
+    ),
+    'DEFAULT_FILTER_BACKENDS':(
+        'django_filters.rest_framework.DjangoFilterBackend',
+    )
+}
+
+import djcelery
+djcelery.setup_loader()
+BROKER_URL= 'redis://127.0.0.1:6379/1'
+CELERY_IMPORTS=('CeleryTask.tasks')
+CELERY_TIMEZONE='Asia/Shanghai'
+CELERYBEAT_SCHEDULER='djcelery.schedulers.DatabaseScheduler'
+
+from celery.schedules import crontab
+from celery.schedules import timedelta
+
+CELERYBEAT_SCHEDULE={
+    u'测试定时器1':{
+        "task":"celeryTask.tasks.taskExample",
+        "schedule":timedelta(seconds=30),
+        "args":(),
+    },
 }

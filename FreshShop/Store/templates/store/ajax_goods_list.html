@@ -51,7 +51,7 @@
         <div class="dataTables_paginate paging_simple_numbers">
         <ul class="pagination">
                 <li class="paginate_button page-item" v-for="p in page_range">
-                    <a class="page-link" href="#" v-on:click="get_page_data(p)">{{ p }}</a>
+                    <a class="page-link" href="#" v-if="p >0" v-on:click="get_page_data(p)">{{ p }}</a>
                 </li>
         </ul>
     </div>
@@ -76,7 +76,7 @@
                     function (data) {
                         this.goods_list=data.data.results;
                         page_number=Math.ceil(data.data.count/3);
-                        var page_range= [...new Array(page_number).keys()];
+                        var page_range= [...new Array(page_number+1).keys()];
                         this.page_range=page_range
                     },
                     function (error) {
@@ -89,8 +89,8 @@
                     this.$http.get("/APIgoods/?page="+page).then(
                         function (data) {
                             this.goods_list=data.data.results;
-                            page_number=Math.ceil(data.data.count/10);
-                            var page_range= [...new Array(page_number).keys()];
+                            page_number=Math.ceil(data.data.count/3);
+                            var page_range= [...new Array(page_number+1).keys()];
                             this.page_range=page_range
                         },
                          function (error) {

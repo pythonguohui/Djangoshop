@@ -16,5 +16,6 @@ urlpatterns = [
     path("add_goods_type/",add_goods_type),
     path("delete/",delete),
     path("order_list/",order_list),
-    path(r"ajax_goods_list/",ajax_goods_list)
+    path(r"ajax_goods_list/",ajax_goods_list),
+    path("get_add/",get_add)
 ]

@@ -1,9 +1,9 @@
 import hashlib
 
-
 from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.shortcuts import HttpResponseRedirect
+from django_filters.rest_framework import DjangoFilterBackend
 
 from Buyer.models import OrderDetail
 
@@ -251,6 +251,8 @@ from Store.serializers import *
 class UserViewSet(viewsets.ModelViewSet):
     queryset = Goods.objects.all()
     serializer_class=UserSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields=["goods_name","goods_price"]
 
 
 class TypeViewSet(viewsets.ModelViewSet):
@@ -260,5 +262,12 @@ class TypeViewSet(viewsets.ModelViewSet):
 def ajax_goods_list(request):
     return render(request,"store/ajax_goods_list.html")
 
+
+from django.http import JsonResponse
+from CeleryTask.tasks import add
+
+def get_add(request):
+    add.delay(3,3)
+    return JsonResponse({"status":200})
 
 # Create your views here.
