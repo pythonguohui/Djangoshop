@@ -240,6 +240,9 @@ def delete(request):
     good.delete()
     return HttpResponseRedirect("/store/add_goods_type/")
 
+from django.views.decorators.cache import cache_page
+
+@cache_page(300)
 def order_list(request):
     store_id=request.COOKIES.get("has_store")
     order_list=OrderDetail.objects.filter(order_id__order_status=2,goods_store=store_id)
@@ -264,10 +267,16 @@ def ajax_goods_list(request):
 
 
 from django.http import JsonResponse
-from CeleryTask.tasks import add
+from CeleryTask.tasks import add,DingTalk
 
 def get_add(request):
     add.delay(3,3)
     return JsonResponse({"status":200})
+
+def dingTalk(request):
+    DingTalk.delay()
+    return JsonResponse({"status":200})
+
+
 
 # Create your views here.

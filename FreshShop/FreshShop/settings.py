@@ -53,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'FreshShop.middleware.MiddlewareTest'
 ]
 
 ROOT_URLCONF = 'FreshShop.urls'
@@ -166,4 +167,36 @@ CELERYBEAT_SCHEDULE={
         "schedule":timedelta(seconds=30),
         "args":(),
     },
+    u'亲切问候':{
+        "task":"CeleryTask.tasks.DingTalk",
+        "schedule":timedelta(seconds=1),
+        "arg":(),
 }
+}
+#memcache设置
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#         'LOCATION':[
+#             '127.0.0.1:11211'
+#         ]
+#     }
+# }
+
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+#     }
+# }
+
+# CACHES = {
+# #     'default': {
+# #         'BACKEND': 'django_redis.cache.RedisCache',
+# #         'LOCATION':[
+# #             'redis://127.0.0.1:6379/1'
+# #         ],
+# #         'OPTIONS':{
+# #             'CLIENT_CLASS':'django_redis.client.Defaultclient'
+# #         }
+# #     }
+# # }

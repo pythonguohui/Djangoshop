@@ -1,5 +1,8 @@
 from django.urls import path,re_path
 from Store.views import *
+
+from django.views.decorators.cache import cache_page
+
 urlpatterns = [
     path('register/',register),
     path('login/',login),
@@ -15,7 +18,11 @@ urlpatterns = [
     re_path(r"set_goods/(?P<status>\w+)/",set_goods),
     path("add_goods_type/",add_goods_type),
     path("delete/",delete),
-    path("order_list/",order_list),
+
+    path("order_list/",cache_page(300)(order_list)),
+
     path(r"ajax_goods_list/",ajax_goods_list),
-    path("get_add/",get_add)
+    path("get_add/",get_add),
+    path("dingTalk/",dingTalk),
+
 ]
